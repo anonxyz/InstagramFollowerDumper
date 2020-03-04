@@ -1,5 +1,5 @@
 # InstagramFollowerDumper
-This simple python script will dump all instagram followers of the person your specify.
+This simple python script will dump all instagram followers of the person you specify.
 
 
 NOTE:- THIS SCRIPT DOES NOT USE ANY INSTAGRAM API.INSTEAD IT USES YOUR INSTAGRAM SESSION VARIABLE CALLED  :- sessionid
