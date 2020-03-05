@@ -10,16 +10,42 @@ session=""    #put your user session here!!
 
 
 def biodumper():
+	fp2=open("dump2.txt","w")	
+	with open("dump1.txt","r") as fp:
+		for username in fp:
+			b_obj=io.BytesIO()
+			crl=pycurl.Curl()
+			url="https://www.instagram.com/"+username.strip()+"/"
+			crl.setopt(crl.URL,url)
+			print("\n\n\n"+url+"\n")
+			fp2.write("\n\n\n"+url+"\n")
+			crl.setopt(crl.WRITEDATA,b_obj)
+			crl.setopt(crl.USERAGENT,"Mozilla/5.0 (X11; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0")
+			crl.setopt(crl.COOKIE,"sessionid="+session)
+			crl.perform()
+			crl.close()
+			getdata=b_obj.getvalue()
+			html=getdata.decode('utf-8')
+			#start extracting information here
+			result=[m.start() for m in re.finditer("biography",html)]
+			i=12
+			strstart=result[1]
+			usernamedump=""
+			while(html[strstart+i])!="\"":
+				usernamedump+=html[strstart+i]
+				print(html[strstart+i],end="")
+				i+=1
+			fp2.write(usernamedump+"\n\n----------------------------------------------------")
+	print("All bio has succesfully been dumped")
+	fp2.close()
 	sys.exit()
-
-
 
 def getrestoftheusernames(idnum,edge,followersgot,total_followers):
 	print("FOLLOWERS_GOT : "+str(followersgot))
 	print("TOTAL FOLLOWERS : "+str(total_followers))
 	if (int(total_followers)==int(followersgot)):
 		print("ALL FOLLOWERS EXTRACTED")
-		answer=input("would you like to to dump information on the follower that were extracted? Y/N")
+		answer=input("would you like to to dump information on the follower that were extracted? Y/N\n")
 		answer=answer.lower()
 		if answer == 'y':
 			print("ok")
